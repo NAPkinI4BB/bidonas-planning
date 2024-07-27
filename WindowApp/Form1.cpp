@@ -5,6 +5,21 @@ using namespace System;
 using namespace Windows::Forms;
 using namespace Data::OleDb; // Для работы с БД
 
+bool areCellsFilled(DataGridView^ grid)
+{
+	for each (DataGridViewRow ^ row in grid->Rows)
+	{
+		if (!row->IsNewRow) {
+			for each (DataGridViewCell ^ cell in row->Cells) {
+				if (cell->Value == nullptr || cell->Value->ToString()->Trim() == "") {
+					return false;
+				}
+			}
+		}
+	}
+	return true;
+}
+
 [STAThreadAttribute] // Запуск отдельного потока (изучить)
 int main(array<String^>^ args)
 {
@@ -70,6 +85,9 @@ System::Void WindowApp::Form1::button1_Click(System::Object^ sender, System::Eve
 	{
 		accessConn->Open();
 
+		if (!areCellsFilled(grid)) throw gcnew Exception("Введи все данные, придурок блять");
+
+		
 		// Очистим таблицу
 		String^ delQuery = "DELETE FROM [table1]";
 		OleDbCommand^ command = gcnew OleDbCommand(delQuery, accessConn);
@@ -80,12 +98,6 @@ System::Void WindowApp::Form1::button1_Click(System::Object^ sender, System::Eve
 		// Перебор введенного содержимого и запись его в БД
 		for (int i = 0; i < grid->Rows->Count - 1; i++)
 		{
-			if (grid->Rows[i]->Cells[0]->Value == nullptr ||
-				grid->Rows[i]->Cells[1]->Value == nullptr ||
-				grid->Rows[i]->Cells[2]->Value == nullptr ||
-				grid->Rows[i]->Cells[3]->Value == nullptr) throw gcnew Exception("Введи все данные, придурок блять");
-
-			//TODO придумать обработку сообщения о введенных не всех данных
 			String^ time = grid->Rows[i]->Cells[0]->Value->ToString();
 			String^ task = grid->Rows[i]->Cells[1]->Value->ToString();
 			String^ dT = grid->Rows[i]->Cells[2]->Value->ToString();
@@ -118,35 +130,21 @@ System::Void WindowApp::Form1::button1_Click(System::Object^ sender, System::Eve
 System::Void WindowApp::Form1::clearForm(System::Object^ sender, System::EventArgs^ e)
 {
 	// Очистка формы по кнопке
-	/*for (int i = 0; i < grid->Rows->Count - 1; i++)
-	{
-		for (int j = 0; j < grid->Rows[i]->Cells->Count; j++)
-		{
-			grid->Rows[i]->Cells[j]->Value = nullptr;
-		}
-	}*/
 	grid->Rows->Clear();
 
 	return System::Void();
 }
 
-bool areCellsFilled(DataGridView^ grid)
-{
-	for each (DataGridViewRow^ row in grid->Rows)
-	{
-		if (!row->IsNewRow) {
-			for each (DataGridViewCell ^ cell in row->Cells) {
-				if (cell->Value == nullptr || cell->Value->ToString()->Trim() == "") {
-					return false;
-				}
-			}
-		}
-	}
-	return true;
-}
+
 
 System::Void WindowApp::Form1::clearSelected(System::Object^ sender, System::EventArgs^ e)
 {
+
+	DateTime dt = dateTimePicker1->Value;
+	String^ dateString = dt.ToShortDateString();
+
+	// Вывод выбранной даты в MessageBox
+	MessageBox::Show("Выбранная дата: " + dateString, "Информация", MessageBoxButtons::OK, MessageBoxIcon::Information);
 	for (int i = 0; i < grid->Rows->Count - 1; i++)
 	{
 		if (grid->Rows[i]->Selected)
@@ -161,6 +159,6 @@ System::Void WindowApp::Form1::clearSelected(System::Object^ sender, System::Eve
 	}
 	return System::Void();
 }
-//todo
+
 
 

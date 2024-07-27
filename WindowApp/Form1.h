@@ -47,6 +47,10 @@ namespace WindowApp {
 	private: System::Windows::Forms::TabControl^ tabControl1;
 	private: System::Windows::Forms::Button^ clear_button;
 	private: System::Windows::Forms::Button^ selected;
+	private: System::Windows::Forms::DateTimePicker^ dateTimePicker1;
+	private: System::Data::DataSet^ dataSet1;
+	private: System::Windows::Forms::Button^ button1;
+
 	private: System::ComponentModel::IContainer^ components;
 	protected:
 
@@ -77,9 +81,13 @@ namespace WindowApp {
 			this->SP = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->push_button = (gcnew System::Windows::Forms::Button());
 			this->tabControl1 = (gcnew System::Windows::Forms::TabControl());
+			this->dateTimePicker1 = (gcnew System::Windows::Forms::DateTimePicker());
+			this->dataSet1 = (gcnew System::Data::DataSet());
+			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->plan->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->grid))->BeginInit();
 			this->tabControl1->SuspendLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataSet1))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// tabPage1
@@ -87,7 +95,7 @@ namespace WindowApp {
 			this->tabPage1->Location = System::Drawing::Point(4, 22);
 			this->tabPage1->Name = L"tabPage1";
 			this->tabPage1->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage1->Size = System::Drawing::Size(968, 490);
+			this->tabPage1->Size = System::Drawing::Size(715, 490);
 			this->tabPage1->TabIndex = 2;
 			this->tabPage1->Text = L"Информация";
 			this->tabPage1->UseVisualStyleBackColor = true;
@@ -102,7 +110,7 @@ namespace WindowApp {
 			this->plan->Location = System::Drawing::Point(4, 22);
 			this->plan->Name = L"plan";
 			this->plan->Padding = System::Windows::Forms::Padding(3);
-			this->plan->Size = System::Drawing::Size(968, 490);
+			this->plan->Size = System::Drawing::Size(715, 490);
 			this->plan->TabIndex = 0;
 			this->plan->Text = L"Планер";
 			this->plan->UseVisualStyleBackColor = true;
@@ -153,7 +161,7 @@ namespace WindowApp {
 			});
 			this->grid->Location = System::Drawing::Point(23, 11);
 			this->grid->Name = L"grid";
-			this->grid->Size = System::Drawing::Size(920, 443);
+			this->grid->Size = System::Drawing::Size(688, 443);
 			this->grid->TabIndex = 1;
 			this->grid->CellContentClick += gcnew System::Windows::Forms::DataGridViewCellEventHandler(this, &Form1::dataGridView1_CellContentClick);
 			// 
@@ -199,15 +207,40 @@ namespace WindowApp {
 			this->tabControl1->Location = System::Drawing::Point(2, 2);
 			this->tabControl1->Name = L"tabControl1";
 			this->tabControl1->SelectedIndex = 0;
-			this->tabControl1->Size = System::Drawing::Size(976, 516);
+			this->tabControl1->Size = System::Drawing::Size(723, 516);
 			this->tabControl1->SizeMode = System::Windows::Forms::TabSizeMode::Fixed;
 			this->tabControl1->TabIndex = 1;
+			// 
+			// dateTimePicker1
+			// 
+			this->dateTimePicker1->Location = System::Drawing::Point(756, 65);
+			this->dateTimePicker1->Name = L"dateTimePicker1";
+			this->dateTimePicker1->Size = System::Drawing::Size(200, 20);
+			this->dateTimePicker1->TabIndex = 2;
+			//this->dateTimePicker1->ValueChanged += gcnew System::EventHandler(this, &Form1::dateTimePicker1_ValueChanged);
+			// 
+			// dataSet1
+			// 
+			this->dataSet1->DataSetName = L"NewDataSet";
+			// 
+			// button1
+			// 
+			this->button1->Font = (gcnew System::Drawing::Font(L"Arial", 9.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->button1->Location = System::Drawing::Point(756, 484);
+			this->button1->Name = L"button1";
+			this->button1->Size = System::Drawing::Size(152, 24);
+			this->button1->TabIndex = 5;
+			this->button1->Text = L"Clear selected";
+			this->button1->UseVisualStyleBackColor = true;
 			// 
 			// Form1
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(990, 530);
+			this->ClientSize = System::Drawing::Size(1031, 659);
+			this->Controls->Add(this->button1);
+			this->Controls->Add(this->dateTimePicker1);
 			this->Controls->Add(this->tabControl1);
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->Name = L"Form1";
@@ -217,6 +250,7 @@ namespace WindowApp {
 			this->plan->ResumeLayout(false);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->grid))->EndInit();
 			this->tabControl1->ResumeLayout(false);
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataSet1))->EndInit();
 			this->ResumeLayout(false);
 
 		}
@@ -236,6 +270,7 @@ namespace WindowApp {
 	private: System::Void clearForm(System::Object^ sender, System::EventArgs^ e);
 
 	private: System::Void clearSelected(System::Object^ sender, System::EventArgs^ e);
+
 };
 
 }
