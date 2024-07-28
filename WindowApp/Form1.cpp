@@ -76,22 +76,38 @@ System::Void WindowApp::Form1::load_button_Click(System::Object^ sender, System:
 }
 
 
-System::Void WindowApp::Form1::button1_Click(System::Object^ sender, System::EventArgs^ e)
+System::Void WindowApp::Form1::push(System::Object^ sender, System::EventArgs^ e)
 {
-	String^ conStr = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=planDB.accdb";
+	String^ conStr = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=planDB.accdb;Mode=ReadWrite;";
 	OleDbConnection^ accessConn = gcnew OleDbConnection(conStr);
 
 	try
 	{
 		accessConn->Open();
 
-		if (!areCellsFilled(grid)) throw gcnew Exception("Введи все данные, придурок блять");
+		DateTime dt = dateTimePicker1->Value;
+		String^ tableName = dt.ToString("dd-MM-yyyy");
 
-		
+		String^ checkQuery = String::Format("SELECT 1 FROM MSysObjects WHERE Type = 1 AND Name = ?", tableName);
+		OleDbCommand^ checkCommand = gcnew OleDbCommand(checkQuery, accessConn);
+		checkCommand->Parameters->AddWithValue("?", tableName);
+		bool isTable = Convert::ToBoolean(checkCommand->ExecuteScalar());
+
+		if (!areCellsFilled(grid)) throw gcnew Exception("Введи все данные");
+
+
+		//Создадим таблицу по данной дате, если не создана
+		if (!isTable)
+		{
+			String^ createQuery = String::Format("CREATE TABLE [{0}] ([Time] VARCHAR(70), Task VARCHAR(70), TimeToDo INT, SP INT)", tableName);
+			OleDbCommand^ commandCr = gcnew OleDbCommand(createQuery, accessConn);
+			commandCr->ExecuteNonQuery();
+		}
+
 		// Очистим таблицу
-		String^ delQuery = "DELETE FROM [table1]";
-		OleDbCommand^ command = gcnew OleDbCommand(delQuery, accessConn);
-		command->ExecuteNonQuery();
+		String^ delQuery = String::Format("DELETE FROM [{0}]", tableName);
+		OleDbCommand^ commandD = gcnew OleDbCommand(delQuery, accessConn);
+		commandD->ExecuteNonQuery();
 
 
 
@@ -104,8 +120,8 @@ System::Void WindowApp::Form1::button1_Click(System::Object^ sender, System::Eve
 			String^ sp = grid->Rows[i]->Cells[3]->Value->ToString();
 
 
-			String^ oneRowQuery = String::Format("INSERT INTO [table1] ([Time], Task, TimeToDo, SP) VALUES ('{0}', '{1}', '{2}', '{3}')",
-				time, task, dT, sp);
+			String^ oneRowQuery = String::Format("INSERT INTO [{0}] ([Time], Task, TimeToDo, SP) VALUES ('{1}', '{2}', '{3}', '{4}')",
+				tableName, time, task, dT, sp);
 			//String^ oneRowQuery = "INSERT INTO [table1] VALUES ('" + i + "', '" + time + "', '" + task + "', '" + dT + "', '" + sp + "')";
 			OleDbCommand^ commandPush = gcnew OleDbCommand(oneRowQuery, accessConn);
 			commandPush->ExecuteNonQuery();
@@ -139,12 +155,6 @@ System::Void WindowApp::Form1::clearForm(System::Object^ sender, System::EventAr
 
 System::Void WindowApp::Form1::clearSelected(System::Object^ sender, System::EventArgs^ e)
 {
-
-	DateTime dt = dateTimePicker1->Value;
-	String^ dateString = dt.ToShortDateString();
-
-	// Вывод выбранной даты в MessageBox
-	MessageBox::Show("Выбранная дата: " + dateString, "Информация", MessageBoxButtons::OK, MessageBoxIcon::Information);
 	for (int i = 0; i < grid->Rows->Count - 1; i++)
 	{
 		if (grid->Rows[i]->Selected)
