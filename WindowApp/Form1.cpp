@@ -35,7 +35,6 @@ int main(array<String^>^ args)
 	WindowApp::Form1 form;
 	Application::Run(% form);
 
-
 	return 0;
 }
 
@@ -50,6 +49,14 @@ System::Void WindowApp::Form1::load_button_Click(System::Object^ sender, System:
 		String^ tableName = getDate(dateTimePicker1);
 		// Запрос
 		accessConn->Open(); // Открыли соединение
+
+		String^ checkQuery = "SELECT 1 FROM MSysObjects WHERE Type = 1 AND Name = ?";
+		OleDbCommand^ checkCommand = gcnew OleDbCommand(checkQuery, accessConn);
+		checkCommand->Parameters->AddWithValue("?", tableName);
+		bool isTable = Convert::ToBoolean(checkCommand->ExecuteScalar());
+
+		if (!isTable) return System::Void();
+
 		String^ query = String::Format("SELECT * FROM [{0}]", tableName);
 		OleDbCommand^ command = gcnew OleDbCommand(query, accessConn);
 		OleDbDataReader^ reader = command->ExecuteReader();
@@ -145,6 +152,12 @@ System::Void WindowApp::Form1::push(System::Object^ sender, System::EventArgs^ e
 	{
 		accessConn->Close();
 	}
+	return System::Void();
+}
+
+System::Void WindowApp::Form1::add_Row_click(System::Object^ sender, System::EventArgs^ e)
+{
+	grid->Rows->Add();
 	return System::Void();
 }
 
