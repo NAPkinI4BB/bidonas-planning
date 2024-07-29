@@ -20,6 +20,12 @@ bool areCellsFilled(DataGridView^ grid)
 	return true;
 }
 
+System::String^ getDate(DateTimePicker^ dtp)
+{
+	DateTime dt = dtp->Value;
+	return dt.ToString("dd-MM-yyyy");
+}
+
 [STAThreadAttribute] // Запуск отдельного потока (изучить)
 int main(array<String^>^ args)
 {
@@ -41,9 +47,10 @@ System::Void WindowApp::Form1::load_button_Click(System::Object^ sender, System:
 	
 	try
 	{
+		String^ tableName = getDate(dateTimePicker1);
 		// Запрос
 		accessConn->Open(); // Открыли соединение
-		String^ query = "SELECT * FROM [table1]";
+		String^ query = String::Format("SELECT * FROM [{0}]", tableName);
 		OleDbCommand^ command = gcnew OleDbCommand(query, accessConn);
 		OleDbDataReader^ reader = command->ExecuteReader();
 
@@ -83,12 +90,10 @@ System::Void WindowApp::Form1::push(System::Object^ sender, System::EventArgs^ e
 
 	try
 	{
+		String^ tableName = getDate(dateTimePicker1);
+
 		accessConn->Open();
-
-		DateTime dt = dateTimePicker1->Value;
-		String^ tableName = dt.ToString("dd-MM-yyyy");
-
-		String^ checkQuery = String::Format("SELECT 1 FROM MSysObjects WHERE Type = 1 AND Name = ?", tableName);
+		String^ checkQuery = "SELECT 1 FROM MSysObjects WHERE Type = 1 AND Name = ?";
 		OleDbCommand^ checkCommand = gcnew OleDbCommand(checkQuery, accessConn);
 		checkCommand->Parameters->AddWithValue("?", tableName);
 		bool isTable = Convert::ToBoolean(checkCommand->ExecuteScalar());
