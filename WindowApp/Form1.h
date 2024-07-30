@@ -1,5 +1,7 @@
 #pragma once
 
+#include "IsValidFormat.h"
+
 namespace WindowApp {
 
 	using namespace System;

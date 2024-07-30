@@ -120,7 +120,7 @@ System::Void WindowApp::Form1::push(System::Object^ sender, System::EventArgs^ e
 		//Создадим таблицу по данной дате, если не создана
 		if (!isTable)
 		{
-			String^ createQuery = String::Format("CREATE TABLE [{0}] ([Time] VARCHAR(70), Task VARCHAR(70), TimeToDo INT, SP INT)", tableName);
+			String^ createQuery = String::Format("CREATE TABLE [{0}] ([Time] VARCHAR(50), Task VARCHAR(100), TimeToDo VARCHAR(50), SP INT)", tableName);
 			OleDbCommand^ commandCr = gcnew OleDbCommand(createQuery, accessConn);
 			commandCr->ExecuteNonQuery();
 		}
@@ -136,6 +136,8 @@ System::Void WindowApp::Form1::push(System::Object^ sender, System::EventArgs^ e
 		for (int i = 0; i < grid->Rows->Count; i++)
 		{
 			String^ time = grid->Rows[i]->Cells[0]->Value->ToString();
+			if (!isValidTime(time)) throw gcnew Exception("Неправильный формат времени");
+
 			String^ task = grid->Rows[i]->Cells[1]->Value->ToString();
 			String^ dT = grid->Rows[i]->Cells[2]->Value->ToString();
 			String^ sp = grid->Rows[i]->Cells[3]->Value->ToString();
@@ -154,7 +156,7 @@ System::Void WindowApp::Form1::push(System::Object^ sender, System::EventArgs^ e
 		MessageBox::Show(e->Message, "InvalidOperationException", MessageBoxButtons::OK, MessageBoxIcon::Error);
 	}
 	catch (Exception^ e) {
-		MessageBox::Show(e->Message, "Exception", MessageBoxButtons::OK, MessageBoxIcon::Error);
+		MessageBox::Show(e->Message, "Ошибка!", MessageBoxButtons::OK, MessageBoxIcon::Error);
 	}
 	finally
 	{

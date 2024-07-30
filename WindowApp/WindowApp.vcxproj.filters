@@ -18,10 +18,16 @@
     <ClCompile Include="Form1.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="IsValidFormat.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Form1.h">
       <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="IsValidFormat.h">
+      <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
