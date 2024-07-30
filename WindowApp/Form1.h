@@ -75,6 +75,7 @@ namespace WindowApp {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(Form1::typeid));
 			this->tabPage1 = (gcnew System::Windows::Forms::TabPage());
 			this->plan = (gcnew System::Windows::Forms::TabPage());
 			this->flowLayoutPanel1 = (gcnew System::Windows::Forms::FlowLayoutPanel());
@@ -274,10 +275,11 @@ namespace WindowApp {
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(947, 524);
 			this->Controls->Add(this->tabControl1);
+			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->Name = L"Form1";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"Bidonas planning";
-			this->Load += gcnew System::EventHandler(this, &Form1::Form1_Load);
+			this->Load += gcnew System::EventHandler(this, &Form1::form_load);
 			this->plan->ResumeLayout(false);
 			this->flowLayoutPanel1->ResumeLayout(false);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->grid))->EndInit();
@@ -297,6 +299,7 @@ namespace WindowApp {
 	}
 	private: System::Void load_button_Click(System::Object^ sender, System::EventArgs^ e);
 
+
 	private: System::Void clearForm(System::Object^ sender, System::EventArgs^ e);
 
 	private: System::Void clearSelected(System::Object^ sender, System::EventArgs^ e);
@@ -304,11 +307,14 @@ namespace WindowApp {
 
 	private: System::Void Test(System::Object^ sender, System::EventArgs^ e) {
 	}
-	private: System::Void dateTimePicker1_ValueChanged(System::Object^ sender, System::EventArgs^ e) {
-	}
+	private: System::Void dateTimePicker1_ValueChanged(System::Object^ sender, System::EventArgs^ e);
+
 	private: System::Void push(System::Object^ sender, System::EventArgs^ e);
 
 	private: System::Void add_Row_click(System::Object^ sender, System::EventArgs^ e);
+
+	private: System::Void form_load(System::Object^ sender, System::EventArgs^ e);
+
 };
 
 }

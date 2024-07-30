@@ -26,6 +26,8 @@ System::String^ getDate(DateTimePicker^ dtp)
 	return dt.ToString("dd-MM-yyyy");
 }
 
+
+
 [STAThreadAttribute] // Запуск отдельного потока (изучить)
 int main(array<String^>^ args)
 {
@@ -34,7 +36,6 @@ int main(array<String^>^ args)
 
 	WindowApp::Form1 form;
 	Application::Run(% form);
-
 	return 0;
 }
 
@@ -90,6 +91,14 @@ System::Void WindowApp::Form1::load_button_Click(System::Object^ sender, System:
 }
 
 
+System::Void WindowApp::Form1::dateTimePicker1_ValueChanged(System::Object^ sender, System::EventArgs^ e)
+{
+	clear_button->PerformClick();
+	load_button->PerformClick();
+	return System::Void();
+}
+
+
 System::Void WindowApp::Form1::push(System::Object^ sender, System::EventArgs^ e)
 {
 	String^ conStr = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=planDB.accdb;Mode=ReadWrite;";
@@ -124,7 +133,7 @@ System::Void WindowApp::Form1::push(System::Object^ sender, System::EventArgs^ e
 
 
 		// Перебор введенного содержимого и запись его в БД
-		for (int i = 0; i < grid->Rows->Count - 1; i++)
+		for (int i = 0; i < grid->Rows->Count; i++)
 		{
 			String^ time = grid->Rows[i]->Cells[0]->Value->ToString();
 			String^ task = grid->Rows[i]->Cells[1]->Value->ToString();
@@ -134,7 +143,6 @@ System::Void WindowApp::Form1::push(System::Object^ sender, System::EventArgs^ e
 
 			String^ oneRowQuery = String::Format("INSERT INTO [{0}] ([Time], Task, TimeToDo, SP) VALUES ('{1}', '{2}', '{3}', '{4}')",
 				tableName, time, task, dT, sp);
-			//String^ oneRowQuery = "INSERT INTO [table1] VALUES ('" + i + "', '" + time + "', '" + task + "', '" + dT + "', '" + sp + "')";
 			OleDbCommand^ commandPush = gcnew OleDbCommand(oneRowQuery, accessConn);
 			commandPush->ExecuteNonQuery();
 		}
@@ -158,6 +166,12 @@ System::Void WindowApp::Form1::push(System::Object^ sender, System::EventArgs^ e
 System::Void WindowApp::Form1::add_Row_click(System::Object^ sender, System::EventArgs^ e)
 {
 	grid->Rows->Add();
+	return System::Void();
+}
+
+System::Void WindowApp::Form1::form_load(System::Object^ sender, System::EventArgs^ e)
+{
+	load_button->PerformClick();
 	return System::Void();
 }
 
