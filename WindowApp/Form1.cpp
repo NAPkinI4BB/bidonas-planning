@@ -189,7 +189,7 @@ System::Void WindowApp::Form1::clearForm(System::Object^ sender, System::EventAr
 
 System::Void WindowApp::Form1::clearSelected(System::Object^ sender, System::EventArgs^ e)
 {
-	for (int i = 0; i < grid->Rows->Count - 1; i++)
+	for (int i = 0; i < grid->Rows->Count; i++)
 	{
 		if (grid->Rows[i]->Selected)
 		{
