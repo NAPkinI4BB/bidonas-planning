@@ -7,4 +7,4 @@ using namespace System::Text::RegularExpressions;
 
 bool isValidTime(String^ str_time);
 
-bool isValidSP();
+bool isValidSP(String^ str_sp);

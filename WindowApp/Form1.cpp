@@ -5,19 +5,17 @@ using namespace System;
 using namespace Windows::Forms;
 using namespace Data::OleDb; // Для работы с БД
 
-bool areCellsFilled(DataGridView^ grid)
+
+void setNulls(DataGridView^ grid)
 {
 	for each (DataGridViewRow ^ row in grid->Rows)
 	{
-		if (!row->IsNewRow) {
-			for each (DataGridViewCell ^ cell in row->Cells) {
-				if (cell->Value == nullptr || cell->Value->ToString()->Trim() == "") {
-					return false;
-				}
+		for each (DataGridViewCell ^ cell in row->Cells) {
+			if (cell->Value == nullptr || cell->Value->ToString()->Trim() == "") {
+				cell->Value = "-";
 			}
 		}
 	}
-	return true;
 }
 
 System::String^ getDate(DateTimePicker^ dtp)
@@ -28,7 +26,7 @@ System::String^ getDate(DateTimePicker^ dtp)
 
 
 
-[STAThreadAttribute] // Запуск отдельного потока (изучить)
+[STAThreadAttribute] // Запуск отдельного потока
 int main(array<String^>^ args)
 {
 	Application::SetCompatibleTextRenderingDefault(false);
@@ -114,13 +112,12 @@ System::Void WindowApp::Form1::push(System::Object^ sender, System::EventArgs^ e
 		checkCommand->Parameters->AddWithValue("?", tableName);
 		bool isTable = Convert::ToBoolean(checkCommand->ExecuteScalar());
 
-		if (!areCellsFilled(grid)) throw gcnew Exception("Введи все данные");
-
+		setNulls(grid);
 
 		//Создадим таблицу по данной дате, если не создана
 		if (!isTable)
 		{
-			String^ createQuery = String::Format("CREATE TABLE [{0}] ([Time] VARCHAR(50), Task VARCHAR(100), TimeToDo VARCHAR(50), SP INT)", tableName);
+			String^ createQuery = String::Format("CREATE TABLE [{0}] ([Time] VARCHAR(50), Task VARCHAR(100), TimeToDo VARCHAR(50), SP VARCHAR(15))", tableName);
 			OleDbCommand^ commandCr = gcnew OleDbCommand(createQuery, accessConn);
 			commandCr->ExecuteNonQuery();
 		}
@@ -136,12 +133,22 @@ System::Void WindowApp::Form1::push(System::Object^ sender, System::EventArgs^ e
 		for (int i = 0; i < grid->Rows->Count; i++)
 		{
 			String^ time = grid->Rows[i]->Cells[0]->Value->ToString();
-			if (!isValidTime(time)) throw gcnew Exception("Неправильный формат времени");
+			if (!isValidTime(time))
+			{
+				String^ messageTime = String::Format("Строка {0}, ячейка 1. Неправильный формат времени. \
+Время может иметь формат ЧЧ-ММ, ЧЧ ММ, ЧЧ:ММ или ЧЧ.ММ", i+1);
+				throw gcnew Exception(messageTime);
+			}
 
 			String^ task = grid->Rows[i]->Cells[1]->Value->ToString();
 			String^ dT = grid->Rows[i]->Cells[2]->Value->ToString();
 			String^ sp = grid->Rows[i]->Cells[3]->Value->ToString();
-
+			if (!isValidSP(sp))
+			{
+				String^ messageSP = String::Format("Строка {0}, ячейка 4. Неправильный формат story points. Введите число",
+					i+1);
+				throw gcnew Exception(messageSP);
+			}
 
 			String^ oneRowQuery = String::Format("INSERT INTO [{0}] ([Time], Task, TimeToDo, SP) VALUES ('{1}', '{2}', '{3}', '{4}')",
 				tableName, time, task, dT, sp);

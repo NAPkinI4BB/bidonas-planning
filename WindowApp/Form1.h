@@ -54,6 +54,12 @@ namespace WindowApp {
 	private: System::Windows::Forms::Button^ addRow;
 	private: System::Windows::Forms::Button^ load_button;
 	private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel1;
+	private: System::Windows::Forms::Label^ label1;
+
+
+	private: System::Windows::Forms::Label^ label4;
+	private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel2;
+
 
 
 
@@ -79,6 +85,7 @@ namespace WindowApp {
 		{
 			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(Form1::typeid));
 			this->tabPage1 = (gcnew System::Windows::Forms::TabPage());
+			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->plan = (gcnew System::Windows::Forms::TabPage());
 			this->flowLayoutPanel1 = (gcnew System::Windows::Forms::FlowLayoutPanel());
 			this->push_button = (gcnew System::Windows::Forms::Button());
@@ -94,15 +101,23 @@ namespace WindowApp {
 			this->dateTimePicker1 = (gcnew System::Windows::Forms::DateTimePicker());
 			this->tabControl1 = (gcnew System::Windows::Forms::TabControl());
 			this->dataSet1 = (gcnew System::Data::DataSet());
+			this->label4 = (gcnew System::Windows::Forms::Label());
+			this->flowLayoutPanel2 = (gcnew System::Windows::Forms::FlowLayoutPanel());
+			this->tabPage1->SuspendLayout();
 			this->plan->SuspendLayout();
 			this->flowLayoutPanel1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->grid))->BeginInit();
 			this->tabControl1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataSet1))->BeginInit();
+			this->flowLayoutPanel2->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// tabPage1
 			// 
+			this->tabPage1->Controls->Add(this->flowLayoutPanel2);
+			this->tabPage1->Controls->Add(this->label4);
+			this->tabPage1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
 			this->tabPage1->Location = System::Drawing::Point(4, 22);
 			this->tabPage1->Name = L"tabPage1";
 			this->tabPage1->Padding = System::Windows::Forms::Padding(3);
@@ -110,6 +125,18 @@ namespace WindowApp {
 			this->tabPage1->TabIndex = 2;
 			this->tabPage1->Text = L"Информация";
 			this->tabPage1->UseVisualStyleBackColor = true;
+			this->tabPage1->Click += gcnew System::EventHandler(this, &Form1::tabPage1_Click);
+			// 
+			// label1
+			// 
+			this->label1->AutoSize = true;
+			this->label1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label1->Location = System::Drawing::Point(3, 0);
+			this->label1->Name = L"label1";
+			this->label1->Size = System::Drawing::Size(628, 54);
+			this->label1->TabIndex = 0;
+			this->label1->Text = resources->GetString(L"label1.Text");
 			// 
 			// plan
 			// 
@@ -271,6 +298,28 @@ namespace WindowApp {
 			// 
 			this->dataSet1->DataSetName = L"NewDataSet";
 			// 
+			// label4
+			// 
+			this->label4->Anchor = System::Windows::Forms::AnchorStyles::Bottom;
+			this->label4->AutoSize = true;
+			this->label4->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 8.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label4->Location = System::Drawing::Point(231, 448);
+			this->label4->Name = L"label4";
+			this->label4->Size = System::Drawing::Size(400, 13);
+			this->label4->TabIndex = 2;
+			this->label4->Text = L"Создано для профилактики прироста мамона заботливым студентом ФГиГа";
+			// 
+			// flowLayoutPanel2
+			// 
+			this->flowLayoutPanel2->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
+				| System::Windows::Forms::AnchorStyles::Right));
+			this->flowLayoutPanel2->Controls->Add(this->label1);
+			this->flowLayoutPanel2->Location = System::Drawing::Point(119, 61);
+			this->flowLayoutPanel2->Name = L"flowLayoutPanel2";
+			this->flowLayoutPanel2->Size = System::Drawing::Size(681, 183);
+			this->flowLayoutPanel2->TabIndex = 3;
+			// 
 			// Form1
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -282,11 +331,15 @@ namespace WindowApp {
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"Bidonas planning";
 			this->Load += gcnew System::EventHandler(this, &Form1::form_load);
+			this->tabPage1->ResumeLayout(false);
+			this->tabPage1->PerformLayout();
 			this->plan->ResumeLayout(false);
 			this->flowLayoutPanel1->ResumeLayout(false);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->grid))->EndInit();
 			this->tabControl1->ResumeLayout(false);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataSet1))->EndInit();
+			this->flowLayoutPanel2->ResumeLayout(false);
+			this->flowLayoutPanel2->PerformLayout();
 			this->ResumeLayout(false);
 
 		}
@@ -316,7 +369,6 @@ namespace WindowApp {
 	private: System::Void add_Row_click(System::Object^ sender, System::EventArgs^ e);
 
 	private: System::Void form_load(System::Object^ sender, System::EventArgs^ e);
-
 };
 
 }
