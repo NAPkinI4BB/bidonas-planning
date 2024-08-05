@@ -60,6 +60,9 @@ System::Void WindowApp::Form1::load_button_Click(System::Object^ sender, System:
 		OleDbCommand^ command = gcnew OleDbCommand(query, accessConn);
 		OleDbDataReader^ reader = command->ExecuteReader();
 
+		// Очистка формы
+		clear_button->PerformClick();
+
 		while (reader->Read())
 		{
 			grid->Rows->Add(reader["Time"], reader["Task"], reader["TimeToDo"], reader["SP"]);
